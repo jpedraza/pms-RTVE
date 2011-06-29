@@ -21,7 +21,6 @@
  */
 package net.pms.rtve;
 
-import com.sun.syndication.feed.synd.SyndEntry;
 import java.io.IOException;
 import java.io.InputStream;
 import net.pms.configuration.RendererConfiguration;
@@ -29,24 +28,19 @@ import net.pms.dlna.WebVideoStream;
 
 public class ProgramStream extends WebVideoStream {
 
-    SyndEntry entry;
+    String urlAlacarta;
     Video video;
 
-    public ProgramStream(SyndEntry entry, String icon) {
-        super(entry.getTitle(), entry.getLink(), icon);
-        this.entry = entry;
-    }
-
-    @Override
-    public String getName() {
-        return super.getName();
+    public ProgramStream(String urlAlacarta, String name) {
+        super(name, urlAlacarta, "");
+        this.urlAlacarta = urlAlacarta;
     }
 
     @Override
     public InputStream getInputStream(long low, long high, double timeseek, RendererConfiguration mediarenderer) throws IOException {
         if (video == null) {
             try {
-                Alacarta alacarta = new Alacarta(entry.getLink());
+                Alacarta alacarta = new Alacarta(urlAlacarta);
                 video = alacarta.getVideoLink();
                 this.URL = video.getUrl();
             } catch (IOException e) {

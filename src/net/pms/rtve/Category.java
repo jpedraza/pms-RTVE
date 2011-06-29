@@ -24,6 +24,7 @@ package net.pms.rtve;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.pms.dlna.virtual.VirtualFolder;
+import org.apache.commons.lang.StringEscapeUtils;
 
 public class Category extends VirtualFolder {
 
@@ -58,8 +59,7 @@ public class Category extends VirtualFolder {
             Matcher m = Pattern.compile(pattern, Pattern.DOTALL).matcher(source);
             while (m.find()) {
                 if (m.group(2).contains("/alacarta/videos") || m.group(2).contains("/infantil/series/")) {
-                    String rss = "http://www.rtve.es/api/programas/" + m.group(1) + "/contents.mrss";
-                    addChild(new Program(rss, m.group(3)));
+                    addChild(new Section(m.group(1), StringEscapeUtils.unescapeHtml(m.group(3))));
                 }
                 find = find + 1;
             }

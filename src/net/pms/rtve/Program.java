@@ -21,48 +21,51 @@
  */
 package net.pms.rtve;
 
-import com.sun.syndication.feed.synd.SyndEntry;
-import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.io.SyndFeedInput;
-import com.sun.syndication.io.XmlReader;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.pms.dlna.virtual.VirtualFolder;
+import org.apache.commons.lang.StringEscapeUtils;
 
 public class Program extends VirtualFolder {
 
-    private SyndFeed feed;
-    private String icon;
-    private String rss;
+    private static final String PROGRAM_URL = "http://www.rtve.es/alacarta/interno/contenttable.shtml?";
+    private Season season;
 
-    public Program(String rss, String name) {
-        super(name, "");
-        this.rss = rss;
-    }
-
-    @Override
-    public InputStream getThumbnailInputStream() {
-        try {
-            icon = "http://www.rtve.es" + feed.getImage().getUrl();
-            return downloadAndSend(icon, true);
-        } catch (Exception e) {
-            return super.getThumbnailInputStream();
-        }
+    public Program(Season season) {
+        super(season.getName(), "");
+        this.season = season;
     }
 
     @Override
     public void discoverChildren() {
+        byte data[] = null;
+        String source = null;
+        String pattern;
+        Matcher m;
+        Integer total = null;
+
         try {
-            URL url = new URL(rss);
-            XmlReader reader = new XmlReader(url);
-            feed = new SyndFeedInput().build(reader);
-            icon = "http://www.rtve.es" + feed.getImage().getUrl();
-            List<SyndEntry> entries = feed.getEntries();
-            for(SyndEntry entry: entries) {
-                addChild(new ProgramStream(entry, icon));
-            }
+            data = downloadAndSendBinary(PROGRAM_URL + season.toString());
+            source = new String(data, "UTF-8");
         } catch (Exception e) {
+        }
+
+        pattern = "<h2>(.*?)</h2>";
+        m = Pattern.compile(pattern, Pattern.DOTALL).matcher(source);
+        if (m.find()) {
+            total = Integer.parseInt(m.group(1).trim().substring(0, 24).replaceAll("[^0-9]", ""));
+        }
+
+        pattern = "<span class=\"col_tit\".*?id=\"(.*?)\".*?href=\"(.*?)\".*?>(.*?)</a>";
+        m = Pattern.compile(pattern, Pattern.DOTALL).matcher(source);
+        while (m.find()) {
+            String programName = null;
+            programName = StringEscapeUtils.unescapeHtml(m.group(3)).replaceAll("\\<[^>]*>", "");
+            addChild(new ProgramStream("http://www.rtve.es" + m.group(2), programName));
+        }
+
+        if (total >= (season.getPag() * Season.getPAGESIZE())) {
+            addChild(new Program(new Season(season.getIdProgram(), season.getId(), "Más", season.getPag() + 1, season.getType())));
         }
     }
 }
