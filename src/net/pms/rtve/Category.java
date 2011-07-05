@@ -44,9 +44,11 @@ public class Category extends VirtualFolder {
     public void discoverChildren() {
         byte data[] = null;
         String source = null;
+        String lastSeason = "";
+        String season = "";
+        boolean completed = false;             
         int count = 1;
-        while (true) { // Fucking infinite loop
-            int find = 0;
+        while (completed == false) {
             String programmUrl = "http://www.rtve.es";
             programmUrl += url.replace(url.substring(url.lastIndexOf("/") - 1), "");
             programmUrl += count + "/?emissionFilter=all";
@@ -59,14 +61,15 @@ public class Category extends VirtualFolder {
             Matcher m = Pattern.compile(pattern, Pattern.DOTALL).matcher(source);
             while (m.find()) {
                 if (m.group(2).contains("/alacarta/videos") || m.group(2).contains("/infantil/series/")) {
+                    season = m.group(1);
                     addChild(new Section(m.group(1), StringEscapeUtils.unescapeHtml(m.group(3))));
                 }
-                find = find + 1;
             }
-            count = count + 1;
-            if (find < 40) {
-                break; //Fucking break.
+            count = count + 1;     
+            if (lastSeason.equals(season)) {
+                completed = true;
             }
+            lastSeason = season;
         }
     }
 }
