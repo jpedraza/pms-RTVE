@@ -46,7 +46,7 @@ public class Category extends VirtualFolder {
         String source = null;
         String lastSeason = "";
         String season = "";
-        boolean completed = false;             
+        boolean completed = false;
         int count = 1;
         while (completed == false) {
             String programmUrl = "http://www.rtve.es";
@@ -65,7 +65,7 @@ public class Category extends VirtualFolder {
                     addChild(new Section(m.group(1), StringEscapeUtils.unescapeHtml(m.group(3))));
                 }
             }
-            count = count + 1;     
+            count = count + 1;
             if (lastSeason.equals(season)) {
                 completed = true;
             }

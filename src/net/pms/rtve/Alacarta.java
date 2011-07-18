@@ -56,10 +56,10 @@ public class Alacarta extends HTTPResource {
         String auxId = source.split("assetDataId::")[1];
         String assetId = auxId.split("\"")[0];
         url = "http://www.rtve.es/scd/CONTENTS/ASSET_DATA_VIDEO/";
-        url = url + assetId.charAt(assetId.length() -1) + "/" 
-                + assetId.charAt(assetId.length() - 2) + "/" 
-                + assetId.charAt(assetId.length() - 3 ) + "/" 
-                + assetId.charAt(assetId.length() - 4 ) + "/ASSET_DATA_VIDEO-" 
+        url = url + assetId.charAt(assetId.length() - 1) + "/"
+                + assetId.charAt(assetId.length() - 2) + "/"
+                + assetId.charAt(assetId.length() - 3) + "/"
+                + assetId.charAt(assetId.length() - 4) + "/ASSET_DATA_VIDEO-"
                 + assetId + ".xml";
 
         data = downloadAndSendBinary(url);
