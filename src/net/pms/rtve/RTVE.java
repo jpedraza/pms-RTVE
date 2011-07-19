@@ -59,10 +59,10 @@ public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
         } catch (IOException e) {
         }
         if (source != null) {
-            String pattern = "<div class=\"SlideList\">(.*?)<ul class=\"families\">";
+            String pattern = "<div class=\"SlideList\">(.*?)</div>";
             Matcher m = Pattern.compile(pattern, Pattern.DOTALL).matcher(source);
             if (m.find()) {
-                pattern = "<li><a title.*?href=\"(.*?)\"><span>(.*?)</span></a></li>";
+                pattern = "<a.*?href=\"(.*?)\".*?><span>(.*?)</span></a>";
                 m = Pattern.compile(pattern, Pattern.DOTALL).matcher(m.group(1));
                 while (m.find()) {
                     mainFolder.addChild(new Category(m.group(2), "", m.group(1)));
