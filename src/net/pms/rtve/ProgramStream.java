@@ -46,6 +46,6 @@ public class ProgramStream extends WebVideoStream {
             } catch (IOException e) {
             }
         }
-        return super.getInputStream(low, high, timeseek, mediarenderer);
+        return super.getInputStream(0, high, timeseek, mediarenderer);
     }
 }
