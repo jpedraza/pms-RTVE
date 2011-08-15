@@ -29,6 +29,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 public class Program extends VirtualFolder {
 
     private static final String PROGRAM_URL = "http://www.rtve.es/alacarta/interno/contenttable.shtml?";
+    private static final long REFRESH_TIME = 1800000; // half hour
     private Season season;
 
     public Program(Season season) {
@@ -67,5 +68,19 @@ public class Program extends VirtualFolder {
         if (total >= (season.getPag() * Season.getPAGESIZE())) {
             addChild(new Program(new Season(season.getIdProgram(), season.getId(), "Más", season.getPag() + 1, season.getType())));
         }
+        lastmodified = System.currentTimeMillis();
+    }
+
+    @Override
+    public boolean refreshChildren() {
+        if (System.currentTimeMillis() - lastmodified > REFRESH_TIME) {
+            try {
+                children.clear();
+                discoverChildren();
+            } catch (Exception e) {
+            }
+            return true;
+        }
+        return false;
     }
 }

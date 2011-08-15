@@ -31,6 +31,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 public class Section extends VirtualFolder {
 
     private static final String SECTION_URL = "http://www.rtve.es/alacarta/interno/contenttable.shtml?ctx=";
+    private static final long REFRESH_TIME = 86400000; // one day
     private String idProgram;
 
     public Section(String idProgram, String name) {
@@ -129,5 +130,19 @@ public class Section extends VirtualFolder {
         }
 
         addChild(new Program(new Season(idProgram, null, "Todo", Season.Type.ALL)));
+        lastmodified = System.currentTimeMillis();
     }
+    
+    @Override
+    public boolean refreshChildren() {
+        if (System.currentTimeMillis() - lastmodified > REFRESH_TIME) {
+            try {
+                children.clear();
+                discoverChildren();
+            } catch (Exception e) {
+            }
+            return true;
+        }
+        return false;
+    }    
 }

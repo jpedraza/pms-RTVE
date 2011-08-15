@@ -28,6 +28,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 public class Category extends VirtualFolder {
 
+    private static final long REFRESH_TIME = 86400000; // one day
     private String url;
 
     public Category(String name, String thumbnailIcon, String url) {
@@ -71,5 +72,19 @@ public class Category extends VirtualFolder {
             }
             lastSeason = season;
         }
+        lastmodified = System.currentTimeMillis();
+    }
+
+    @Override
+    public boolean refreshChildren() {
+        if (System.currentTimeMillis() - lastmodified > REFRESH_TIME) {
+            try {
+                children.clear();
+                discoverChildren();
+            } catch (Exception e) {
+            }
+            return true;
+        }
+        return false;
     }
 }

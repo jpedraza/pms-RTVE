@@ -36,6 +36,8 @@ public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
     private static final String ICON = "http://www.rtve.es/static/css/i/logo.png";
     private static final String NAME = "RTVE";
     private static final String CATEGORY_URL = "http://www.rtve.es/alacarta/programas/todos/todos/1/";
+    private static final long REFRESH_TIME = 86400000; // one day
+    private long lastTime;
 
     @Override
     public DLNAResource getChild() {
@@ -49,8 +51,25 @@ public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
                     return super.getThumbnailInputStream();
                 }
             }
-        };
 
+            @Override
+            public boolean refreshChildren() {
+                lastmodified = lastTime;
+                if (System.currentTimeMillis() - lastmodified > REFRESH_TIME) {
+                    try {
+                        children.clear();
+                        getMainFolder(this);
+                        return true;
+                    } catch (Exception e) {
+                    }
+                }
+                return false;
+            }
+        };
+        return getMainFolder(mainFolder);
+    }
+
+    private VirtualFolder getMainFolder(VirtualFolder mainFolder) {
         byte data[] = null;
         String source = null;
         try {
@@ -69,6 +88,7 @@ public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
                 }
             }
         }
+        lastTime = System.currentTimeMillis();
         return mainFolder;
     }
 
