@@ -30,6 +30,8 @@ import net.pms.dlna.DLNAResource;
 import net.pms.dlna.virtual.VirtualFolder;
 import net.pms.external.AdditionalFolderAtRoot;
 import net.pms.network.HTTPResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
 
@@ -38,6 +40,7 @@ public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
     private static final String CATEGORY_URL = "http://www.rtve.es/alacarta/programas/todos/todos/1/";
     private static final long REFRESH_TIME = 86400000; // one day
     private long lastTime;
+    private static final Logger logger = LoggerFactory.getLogger(RTVE.class);
 
     @Override
     public DLNAResource getChild() {
@@ -59,9 +62,14 @@ public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
                     try {
                         children.clear();
                         getMainFolder(this);
+                        logger.info("RTVE: Refreshing categories.");
                         return true;
                     } catch (Exception e) {
+                        logger.error("RTVE: Could not refresh categories. " + e.getMessage());
                     }
+                } else {
+                    long refreshTime = (REFRESH_TIME - (System.currentTimeMillis() - lastmodified) / 1000) / 60000;
+                    logger.info("RTVE: Put off refreshing categories for " + refreshTime + " minutes.");
                 }
                 return false;
             }
@@ -76,6 +84,7 @@ public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
             data = downloadAndSendBinary(CATEGORY_URL);
             source = new String(data, "UTF-8");
         } catch (IOException e) {
+            logger.error("RTVE: Error retrieving data." + e.getMessage());
         }
         if (source != null) {
             String pattern = "<div class=\"SlideList\">(.*?)</div>";

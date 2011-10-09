@@ -25,11 +25,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.pms.dlna.virtual.VirtualFolder;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Category extends VirtualFolder {
 
     private static final long REFRESH_TIME = 86400000; // one day
     private String url;
+    private static final Logger logger = LoggerFactory.getLogger(Category.class);
 
     public Category(String name, String thumbnailIcon, String url) {
         super(name, thumbnailIcon);
@@ -57,6 +60,7 @@ public class Category extends VirtualFolder {
                 data = downloadAndSendBinary(programmUrl);
                 source = new String(data, "UTF-8");
             } catch (Exception e) {
+                logger.error("RTVE: Error retrieving data." + e.getMessage());
             }
             String pattern = "<span class=\"col_tit\".*?id=\"(.*?)\".*?href=\"(.*?)\".*?>(.*?)<.*?</a>";
             Matcher m = Pattern.compile(pattern, Pattern.DOTALL).matcher(source);
@@ -81,9 +85,14 @@ public class Category extends VirtualFolder {
             try {
                 children.clear();
                 discoverChildren();
+                logger.info("RTVE: Refreshing programs of " + getName());
             } catch (Exception e) {
+                logger.error("RTVE: Could not refresh programs. " + e.getMessage());
             }
             return true;
+        } else {
+            long refreshTime = (REFRESH_TIME - (System.currentTimeMillis() - lastmodified) / 1000) / 60000;
+            logger.info("RTVE: Put off refreshing category " + getName() + " for " + refreshTime + " minutes.");
         }
         return false;
     }

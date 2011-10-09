@@ -25,12 +25,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.pms.dlna.virtual.VirtualFolder;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Program extends VirtualFolder {
 
     private static final String PROGRAM_URL = "http://www.rtve.es/alacarta/interno/contenttable.shtml?";
     private static final long REFRESH_TIME = 1800000; // half hour
     private Season season;
+    private static final Logger logger = LoggerFactory.getLogger(Program.class);
 
     public Program(Season season) {
         super(season.getName(), "");
@@ -49,6 +52,7 @@ public class Program extends VirtualFolder {
             data = downloadAndSendBinary(PROGRAM_URL + season.toString());
             source = new String(data, "UTF-8");
         } catch (Exception e) {
+            logger.error("RTVE: Error retrieving data." + e.getMessage());
         }
 
         pattern = "<h2>(.*?)</h2>";
@@ -77,9 +81,14 @@ public class Program extends VirtualFolder {
             try {
                 children.clear();
                 discoverChildren();
+                logger.info("RTVE: Refreshing videos of " + getName());
             } catch (Exception e) {
+                logger.error("RTVE: Could not refresh videos. " + e.getMessage());
             }
             return true;
+        } else {
+            long refreshTime = (REFRESH_TIME - (System.currentTimeMillis() - lastmodified) / 1000) / 60000;
+            logger.info("RTVE: Put off refreshing videos " + getName() + " for " + refreshTime + " minutes.");
         }
         return false;
     }

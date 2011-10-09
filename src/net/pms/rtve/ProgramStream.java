@@ -25,11 +25,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import net.pms.configuration.RendererConfiguration;
 import net.pms.dlna.WebVideoStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProgramStream extends WebVideoStream {
 
     String urlAlacarta;
     Video video;
+    private static final Logger logger = LoggerFactory.getLogger(ProgramStream.class);
 
     public ProgramStream(String urlAlacarta, String name) {
         super(name, urlAlacarta, "");
@@ -44,6 +47,7 @@ public class ProgramStream extends WebVideoStream {
                 video = alacarta.getVideoLink();
                 this.URL = video.getUrl();
             } catch (IOException e) {
+                logger.error("RTVE: Error retrieving video." + e.getMessage());
             }
         }
         return super.getInputStream(low, high, timeseek, mediarenderer);
