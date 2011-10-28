@@ -24,6 +24,7 @@ package net.pms.rtve;
 import java.io.IOException;
 import java.io.InputStream;
 import net.pms.configuration.RendererConfiguration;
+import net.pms.dlna.Range;
 import net.pms.dlna.WebVideoStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,16 +41,16 @@ public class ProgramStream extends WebVideoStream {
     }
 
     @Override
-    public InputStream getInputStream(long low, long high, double timeseek, RendererConfiguration mediarenderer) throws IOException {
+    public InputStream getInputStream(Range range, RendererConfiguration mediarenderer) throws IOException {
         if (video == null) {
             try {
                 Alacarta alacarta = new Alacarta(urlAlacarta);
                 video = alacarta.getVideoLink();
-                this.URL = video.getUrl();
+                this.url = video.getUrl();
             } catch (IOException e) {
                 logger.error("RTVE: Error retrieving video." + e.getMessage());
             }
         }
-        return super.getInputStream(low, high, timeseek, mediarenderer);
+        return super.getInputStream(range, mediarenderer);
     }
 }

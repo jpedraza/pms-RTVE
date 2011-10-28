@@ -32,8 +32,8 @@ public class Program extends VirtualFolder {
 
     private static final String PROGRAM_URL = "http://www.rtve.es/alacarta/interno/contenttable.shtml?";
     private static final long REFRESH_TIME = 1800000; // half hour
+    private static final Logger LOGGER = LoggerFactory.getLogger(Program.class);
     private Season season;
-    private static final Logger logger = LoggerFactory.getLogger(Program.class);
 
     public Program(Season season) {
         super(season.getName(), "");
@@ -52,7 +52,7 @@ public class Program extends VirtualFolder {
             data = downloadAndSendBinary(PROGRAM_URL + season.toString());
             source = new String(data, "UTF-8");
         } catch (Exception e) {
-            logger.error("RTVE: Error retrieving data." + e.getMessage());
+            LOGGER.error("RTVE: Error retrieving data." + e.getMessage());
         }
 
         pattern = "<h2>(.*?)</h2>";
@@ -72,24 +72,26 @@ public class Program extends VirtualFolder {
         if (total >= (season.getPag() * Season.getPAGESIZE())) {
             addChild(new Program(new Season(season.getIdProgram(), season.getId(), "Más", season.getPag() + 1, season.getType())));
         }
-        lastmodified = System.currentTimeMillis();
+        this.setLastmodified(System.currentTimeMillis());
     }
 
     @Override
-    public boolean refreshChildren() {
-        if (System.currentTimeMillis() - lastmodified > REFRESH_TIME) {
-            try {
-                children.clear();
-                discoverChildren();
-                logger.info("RTVE: Refreshing videos of " + getName());
-            } catch (Exception e) {
-                logger.error("RTVE: Could not refresh videos. " + e.getMessage());
-            }
+    public boolean isRefreshNeeded() {
+        if (System.currentTimeMillis() - this.getLastmodified() > REFRESH_TIME) {
             return true;
-        } else {
-            long refreshTime = (REFRESH_TIME - (System.currentTimeMillis() - lastmodified) / 1000) / 60000;
-            logger.info("RTVE: Put off refreshing videos " + getName() + " for " + refreshTime + " minutes.");
         }
         return false;
+    }
+
+    @Override
+    public void refreshChildren() {
+        try {
+            this.getChildren().clear();
+            LOGGER.info("RTVE: Refreshing videos of " + getName());
+            discoverChildren();
+            this.setLastRefreshTime(System.currentTimeMillis());
+        } catch (Exception e) {
+            LOGGER.error("RTVE: Could not refresh videos. " + e.getMessage());
+        }
     }
 }

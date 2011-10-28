@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 public class Category extends VirtualFolder {
 
     private static final long REFRESH_TIME = 86400000; // one day
+    private static final Logger LOGGER = LoggerFactory.getLogger(Category.class);
     private String url;
-    private static final Logger logger = LoggerFactory.getLogger(Category.class);
 
     public Category(String name, String thumbnailIcon, String url) {
         super(name, thumbnailIcon);
@@ -60,7 +60,7 @@ public class Category extends VirtualFolder {
                 data = downloadAndSendBinary(programmUrl);
                 source = new String(data, "UTF-8");
             } catch (Exception e) {
-                logger.error("RTVE: Error retrieving data." + e.getMessage());
+                LOGGER.error("RTVE: Error retrieving data." + e.getMessage());
             }
             String pattern = "<span class=\"col_tit\".*?id=\"(.*?)\".*?href=\"(.*?)\".*?>(.*?)<.*?</a>";
             Matcher m = Pattern.compile(pattern, Pattern.DOTALL).matcher(source);
@@ -76,24 +76,26 @@ public class Category extends VirtualFolder {
             }
             lastSeason = season;
         }
-        lastmodified = System.currentTimeMillis();
+        this.setLastmodified(System.currentTimeMillis());
     }
 
     @Override
-    public boolean refreshChildren() {
-        if (System.currentTimeMillis() - lastmodified > REFRESH_TIME) {
-            try {
-                children.clear();
-                discoverChildren();
-                logger.info("RTVE: Refreshing programs of " + getName());
-            } catch (Exception e) {
-                logger.error("RTVE: Could not refresh programs. " + e.getMessage());
-            }
+    public boolean isRefreshNeeded() {
+        if (System.currentTimeMillis() - this.getLastmodified() > REFRESH_TIME) {
             return true;
-        } else {
-            long refreshTime = (REFRESH_TIME - (System.currentTimeMillis() - lastmodified) / 1000) / 60000;
-            logger.info("RTVE: Put off refreshing category " + getName() + " for " + refreshTime + " minutes.");
         }
         return false;
+    }
+
+    @Override
+    public void refreshChildren() {
+        try {
+            this.getChildren().clear();
+            LOGGER.info("RTVE: Refreshing programs of " + getName());
+            discoverChildren();
+            this.setLastRefreshTime(System.currentTimeMillis());
+        } catch (Exception e) {
+            LOGGER.error("RTVE: Could not refresh programs. " + e.getMessage());
+        }
     }
 }

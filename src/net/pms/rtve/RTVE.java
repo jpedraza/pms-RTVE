@@ -39,8 +39,8 @@ public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
     private static final String NAME = "RTVE";
     private static final String CATEGORY_URL = "http://www.rtve.es/alacarta/programas/todos/todos/1/";
     private static final long REFRESH_TIME = 86400000; // one day
+    private static final Logger LOGGER = LoggerFactory.getLogger(RTVE.class);
     private long lastTime;
-    private static final Logger logger = LoggerFactory.getLogger(RTVE.class);
 
     @Override
     public DLNAResource getChild() {
@@ -56,22 +56,24 @@ public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
             }
 
             @Override
-            public boolean refreshChildren() {
-                lastmodified = lastTime;
-                if (System.currentTimeMillis() - lastmodified > REFRESH_TIME) {
-                    try {
-                        children.clear();
-                        getMainFolder(this);
-                        logger.info("RTVE: Refreshing categories.");
-                        return true;
-                    } catch (Exception e) {
-                        logger.error("RTVE: Could not refresh categories. " + e.getMessage());
-                    }
-                } else {
-                    long refreshTime = (REFRESH_TIME - (System.currentTimeMillis() - lastmodified) / 1000) / 60000;
-                    logger.info("RTVE: Put off refreshing categories for " + refreshTime + " minutes.");
+            public boolean isRefreshNeeded() {
+                this.setLastmodified(lastTime);
+                if (System.currentTimeMillis() - this.getLastmodified() > REFRESH_TIME) {
+                    return true;
                 }
                 return false;
+            }
+
+            @Override
+            public void refreshChildren() {
+                try {
+                    this.getChildren().clear();
+                    LOGGER.info("RTVE: Refreshing categories.");
+                    getMainFolder(this);
+                    this.setLastRefreshTime(System.currentTimeMillis());
+                } catch (Exception e) {
+                    LOGGER.error("RTVE: Could not refresh categories. " + e.getMessage());
+                }
             }
         };
         return getMainFolder(mainFolder);
@@ -84,7 +86,7 @@ public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
             data = downloadAndSendBinary(CATEGORY_URL);
             source = new String(data, "UTF-8");
         } catch (IOException e) {
-            logger.error("RTVE: Error retrieving data." + e.getMessage());
+            LOGGER.error("RTVE: Error retrieving data." + e.getMessage());
         }
         if (source != null) {
             String pattern = "<div class=\"SlideList\">(.*?)</div>";

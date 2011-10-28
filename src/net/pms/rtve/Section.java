@@ -34,8 +34,8 @@ public class Section extends VirtualFolder {
 
     private static final String SECTION_URL = "http://www.rtve.es/alacarta/interno/contenttable.shtml?ctx=";
     private static final long REFRESH_TIME = 86400000; // one day
+    private static final Logger LOGGER = LoggerFactory.getLogger(Section.class);
     private String idProgram;
-    private static final Logger logger = LoggerFactory.getLogger(Section.class);
 
     public Section(String idProgram, String name) {
         super(name, "");
@@ -61,7 +61,7 @@ public class Section extends VirtualFolder {
                 data = downloadAndSendBinary(SECTION_URL + idProgram + "&seasonFilter=" + season);
                 source = new String(data, "UTF-8");
             } catch (Exception e) {
-                logger.error("RTVE: Error retrieving data." + e.getMessage());
+                LOGGER.error("RTVE: Error retrieving data." + e.getMessage());
             }
             pattern = "<ul id=\"theseasons\">.*?<li class=\"items\">(.*?)</li>";
             m = Pattern.compile(pattern, Pattern.DOTALL).matcher(source);
@@ -102,7 +102,7 @@ public class Section extends VirtualFolder {
                 data = downloadAndSendBinary(SECTION_URL + idProgram + "&seasonFilter=" + season);
                 source = new String(data, "UTF-8");
             } catch (Exception e) {
-                logger.error("RTVE: Error retrieving data." + e.getMessage());
+                LOGGER.error("RTVE: Error retrieving data." + e.getMessage());
             }
             pattern = "<ul id=\"thesections\">.*?<li class=\"items\">(.*?)</li>";
             m = Pattern.compile(pattern, Pattern.DOTALL).matcher(source);
@@ -135,24 +135,26 @@ public class Section extends VirtualFolder {
         }
 
         addChild(new Program(new Season(idProgram, null, "Todo", Season.Type.ALL)));
-        lastmodified = System.currentTimeMillis();
+        this.setLastmodified(System.currentTimeMillis());
     }
 
     @Override
-    public boolean refreshChildren() {
-        if (System.currentTimeMillis() - lastmodified > REFRESH_TIME) {
-            try {
-                children.clear();
-                discoverChildren();
-                logger.info("RTVE: Refreshing seasons and sections of " + getName());
-            } catch (Exception e) {
-                logger.debug("RTVE: Could not refresh seasons and sections. " + e.getMessage());
-            }
+    public boolean isRefreshNeeded() {
+        if (System.currentTimeMillis() - this.getLastmodified() > REFRESH_TIME) {
             return true;
-        } else {
-            long refreshTime = (REFRESH_TIME - (System.currentTimeMillis() - lastmodified) / 1000) / 60000;
-            logger.info("RTVE: Put off refreshing season and sections of " + getName() + " for " + refreshTime + " minutes.");
         }
         return false;
+    }
+
+    @Override
+    public void refreshChildren() {
+        try {
+            this.getChildren().clear();
+            LOGGER.info("RTVE: Refreshing seasons and sections of " + getName());
+            discoverChildren();
+            this.setLastRefreshTime(System.currentTimeMillis());
+        } catch (Exception e) {
+            LOGGER.debug("RTVE: Could not refresh seasons and sections. " + e.getMessage());
+        }
     }
 }
