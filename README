@@ -1,7 +1,6 @@
-pms-RTVE es un plugin para ver la web de RTVE Alacarta mediante el programa ps3-mediaserver.
+Description:
+    This is a plugin for [PS3 MediaServer](http://code.google.com/p/ps3mediaserver/) (PMS) that allows you to stream all TV shows from [RTVE.es](http://www.rtve.es/alacarta/).
 
-Para instalar el plugin, copiar el archivo pms-RTVE.jar a la carpeta plugins del ps3-mediaserver.
+Installation:
+    Download the [pms-RTVE jar file](https://github.com/danighieri/pms-RTVE/downloads), place it in the PMS `plugins` directory and restart PMS.
 
-La forma para averiguar la ubicación del enlace (el archivo Alacarta.java) está basada en las indicaciones de esta url: 
-
-http://www.carballude.es/blog/2010/08/16/descargar-videos-de-tve/

@@ -19,8 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.pms.rtve;
+package net.pms.external.rtve;
 
+import com.irtve.plataforma.rest.model.dto.multimedia.VideoDTO;
+import com.irtve.plataforma.rest.model.dto.multimedia.quality.QualityVideoDTO;
 import java.io.IOException;
 import java.io.InputStream;
 import net.pms.configuration.RendererConfiguration;
@@ -29,26 +31,40 @@ import net.pms.dlna.WebVideoStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ProgramStream extends WebVideoStream {
+public class Videos extends WebVideoStream {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProgramStream.class);
-    String urlAlacarta;
-    Video video;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Videos.class);
+    private VideoDTO videoDTO;
+    private Boolean videoUrl;
+    private Alacarta alacarta;
+    private QualityVideoDTO qualityVideoDTO;
 
-    public ProgramStream(String urlAlacarta, String name) {
-        super(name, urlAlacarta, "");
-        this.urlAlacarta = urlAlacarta;
+    public Videos(VideoDTO videoDTO, Boolean videoUrl) {
+        super(videoDTO.getLongTitle(), videoDTO.getUri(), videoDTO.getThumbnail());
+        this.videoDTO = videoDTO;
+        this.videoUrl = videoUrl;
+        QualitiesVideo qualitiesVideo = new QualitiesVideo(videoDTO.getQualities().getQualities());
+        qualityVideoDTO = qualitiesVideo.getBestQuality();
+    }
+
+    @Override
+    public String getName() {
+        if (videoDTO.getShortTitle() != null) {
+            return videoDTO.getShortTitle();
+        }
+        return super.getName();
     }
 
     @Override
     public InputStream getInputStream(Range range, RendererConfiguration mediarenderer) throws IOException {
-        if (video == null) {
-            try {
-                Alacarta alacarta = new Alacarta(urlAlacarta);
-                video = alacarta.getVideoLink();
-                this.setUrl(video.getUrl());
-            } catch (IOException e) {
-                LOGGER.error("RTVE: Error retrieving video." + e.getMessage());
+        if (qualityVideoDTO != null) {
+            if (!videoUrl && alacarta == null) {
+                alacarta = new Alacarta(qualityVideoDTO.getIdentifier().toString());
+                try {
+                    this.setUrl(alacarta.getVideoLink());
+                } catch (IOException e) {
+                    LOGGER.info("RTVE: Error discovering video: " + videoDTO.getLongTitle());
+                }
             }
         }
         return super.getInputStream(range, mediarenderer);
