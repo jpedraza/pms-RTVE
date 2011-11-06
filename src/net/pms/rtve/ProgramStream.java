@@ -46,7 +46,7 @@ public class ProgramStream extends WebVideoStream {
             try {
                 Alacarta alacarta = new Alacarta(urlAlacarta);
                 video = alacarta.getVideoLink();
-                this.url = video.getUrl();
+                this.setUrl(video.getUrl());
             } catch (IOException e) {
                 logger.error("RTVE: Error retrieving video." + e.getMessage());
             }
