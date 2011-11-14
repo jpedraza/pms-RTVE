@@ -154,7 +154,7 @@ public class Section extends VirtualFolder {
             discoverChildren();
             this.setLastRefreshTime(System.currentTimeMillis());
         } catch (Exception e) {
-            LOGGER.debug("RTVE: Could not refresh seasons and sections. " + e.getMessage());
+            LOGGER.error("RTVE: Could not refresh seasons and sections. " + e.getMessage());
         }
     }
 }

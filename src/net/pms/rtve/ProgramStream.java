@@ -31,9 +31,9 @@ import org.slf4j.LoggerFactory;
 
 public class ProgramStream extends WebVideoStream {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProgramStream.class);
     String urlAlacarta;
     Video video;
-    private static final Logger logger = LoggerFactory.getLogger(ProgramStream.class);
 
     public ProgramStream(String urlAlacarta, String name) {
         super(name, urlAlacarta, "");
@@ -48,7 +48,7 @@ public class ProgramStream extends WebVideoStream {
                 video = alacarta.getVideoLink();
                 this.setUrl(video.getUrl());
             } catch (IOException e) {
-                logger.error("RTVE: Error retrieving video." + e.getMessage());
+                LOGGER.error("RTVE: Error retrieving video." + e.getMessage());
             }
         }
         return super.getInputStream(range, mediarenderer);
