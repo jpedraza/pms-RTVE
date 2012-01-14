@@ -44,7 +44,7 @@ public class Section extends VirtualFolder {
 
     @Override
     public void discoverChildren() {
-        byte data[] = null;
+        byte data[];
         String source = null;
         String lastSeason;
         String season;
@@ -147,7 +147,7 @@ public class Section extends VirtualFolder {
     }
 
     @Override
-    public void refreshChildren() {
+    public void doRefreshChildren() {
         try {
             this.getChildren().clear();
             LOGGER.info("RTVE: Refreshing seasons and sections of " + getName());

@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 
 public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
 
-    private static final String ICON = "http://www.rtve.es/static/css/i/logo.png";
+    private static final String ICON = "images/rtve.png";
     private static final String NAME = "RTVE";
     private static final String CATEGORY_URL = "http://www.rtve.es/alacarta/programas/todos/todos/1/";
     private static final long REFRESH_TIME = 86400000; // one day
@@ -49,8 +49,8 @@ public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
             @Override
             public InputStream getThumbnailInputStream() {
                 try {
-                    return downloadAndSend(ICON, true);
-                } catch (IOException e) {
+                    return RTVE.class.getResourceAsStream(ICON);
+                } catch (Exception e) {
                     return super.getThumbnailInputStream();
                 }
             }
@@ -65,7 +65,7 @@ public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
             }
 
             @Override
-            public void refreshChildren() {
+            public void doRefreshChildren() {
                 try {
                     this.getChildren().clear();
                     LOGGER.info("RTVE: Refreshing categories.");
@@ -80,10 +80,9 @@ public class RTVE extends HTTPResource implements AdditionalFolderAtRoot {
     }
 
     private VirtualFolder getMainFolder(VirtualFolder mainFolder) {
-        byte data[] = null;
         String source = null;
         try {
-            data = downloadAndSendBinary(CATEGORY_URL);
+            byte data[] = downloadAndSendBinary(CATEGORY_URL);
             source = new String(data, "UTF-8");
         } catch (IOException e) {
             LOGGER.error("RTVE: Error retrieving data." + e.getMessage());

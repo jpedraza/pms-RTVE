@@ -42,14 +42,13 @@ public class Program extends VirtualFolder {
 
     @Override
     public void discoverChildren() {
-        byte data[] = null;
         String source = null;
         String pattern;
         Matcher m;
         Integer total = null;
 
         try {
-            data = downloadAndSendBinary(PROGRAM_URL + season.toString());
+            byte data[] = downloadAndSendBinary(PROGRAM_URL + season.toString());
             source = new String(data, "UTF-8");
         } catch (Exception e) {
             LOGGER.error("RTVE: Error retrieving data." + e.getMessage());
@@ -64,8 +63,7 @@ public class Program extends VirtualFolder {
         pattern = "<span class=\"col_tit\".*?id=\"(.*?)\".*?href=\"(.*?)\".*?>(.*?)</a>";
         m = Pattern.compile(pattern, Pattern.DOTALL).matcher(source);
         while (m.find()) {
-            String programName = null;
-            programName = StringEscapeUtils.unescapeHtml(m.group(3)).replaceAll("\\<[^>]*>", "");
+            String programName = StringEscapeUtils.unescapeHtml(m.group(3)).replaceAll("\\<[^>]*>", "");
             addChild(new ProgramStream("http://www.rtve.es" + m.group(2), programName));
         }
 
@@ -84,7 +82,7 @@ public class Program extends VirtualFolder {
     }
 
     @Override
-    public void refreshChildren() {
+    public void doRefreshChildren() {
         try {
             this.getChildren().clear();
             LOGGER.info("RTVE: Refreshing videos of " + getName());

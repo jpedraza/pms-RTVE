@@ -46,7 +46,6 @@ public class Category extends VirtualFolder {
 
     @Override
     public void discoverChildren() {
-        byte data[] = null;
         String source = null;
         String lastSeason = "";
         String season = "";
@@ -57,7 +56,7 @@ public class Category extends VirtualFolder {
             programmUrl += url.replace(url.substring(url.lastIndexOf("/") - 1), "");
             programmUrl += count + "/?emissionFilter=all";
             try {
-                data = downloadAndSendBinary(programmUrl);
+                byte data[] = downloadAndSendBinary(programmUrl);
                 source = new String(data, "UTF-8");
             } catch (Exception e) {
                 LOGGER.error("RTVE: Error retrieving data." + e.getMessage());
@@ -88,7 +87,7 @@ public class Category extends VirtualFolder {
     }
 
     @Override
-    public void refreshChildren() {
+    public void doRefreshChildren() {
         try {
             this.getChildren().clear();
             LOGGER.info("RTVE: Refreshing programs of " + getName());
