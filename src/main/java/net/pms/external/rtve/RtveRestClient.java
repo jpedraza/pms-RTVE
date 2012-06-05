@@ -6,14 +6,9 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
@@ -30,6 +25,7 @@ import java.net.URL;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import net.pms.PMS;
+import net.pms.util.PropertiesUtil;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -56,7 +52,7 @@ public class RtveRestClient {
             HttpClient client = new HttpClient();
             GetMethod method = new GetMethod(uri);
             method.setRequestHeader("Accept", "application/" + format.toString().toLowerCase());
-            method.setRequestHeader("User-agent", PMS.getVersion());
+            method.setRequestHeader("User-agent", PropertiesUtil.getProjectProperties().get("project.name") + " " + PMS.getVersion());
             LOGGER.info("RTVE: Retrieving " + uri);
             int statusCode = client.executeMethod(method);
             if (statusCode != 200) {
@@ -87,7 +83,7 @@ public class RtveRestClient {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/" + format.toString().toLowerCase());
-            connection.setRequestProperty("User-agent", PMS.getVersion());
+            connection.setRequestProperty("User-agent", PropertiesUtil.getProjectProperties().get("project.name") + " " + PMS.getVersion());
             LOGGER.info("RTVE: Retrieving " + uri);
             InputStream xml = connection.getInputStream();
             JAXBContext jc = JAXBContext.newInstance(ViewDTO.class);

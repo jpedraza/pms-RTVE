@@ -6,14 +6,9 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
@@ -23,23 +18,19 @@ package net.pms.external.rtve;
 
 import com.irtve.plataforma.rest.model.dto.ViewDTO;
 import com.irtve.plataforma.rest.model.dto.multimedia.VideoDTO;
-import com.irtve.plataforma.rest.model.dto.topic.TopicDTO;
 import net.pms.dlna.virtual.VirtualFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Topics extends VirtualFolder {
+public class Programs extends VirtualFolder {
 
-    private static final long REFRESH_TIME = 86400000; // one day;
-    private static final Integer SIZE = 50;
-    private static final Logger logger = LoggerFactory.getLogger(Topics.class);
-    private TopicDTO topicDTO;
-    private int nextPage;
+    private static final long REFRESH_TIME = 1800000; // half hour
+    private static final Logger logger = LoggerFactory.getLogger(Programs.class);
+    private ProgramsHelper programHelper;
 
-    public Topics(TopicDTO topicDTO, int page) {
-        super("Videos relacionados con " + topicDTO.getTitle(), "");
-        this.topicDTO = topicDTO;
-        this.nextPage = page;
+    public Programs(ProgramsHelper programHelper) {
+        super(programHelper.getTitle(), "");
+        this.programHelper = programHelper;
     }
 
     @Override
@@ -51,7 +42,8 @@ public class Topics extends VirtualFolder {
 
     @Override
     public boolean isRefreshNeeded() {
-        if (System.currentTimeMillis() - this.getLastmodified() > REFRESH_TIME) {
+        if (System.currentTimeMillis() - this.getLastmodified() > REFRESH_TIME
+                && !programHelper.getProgram().isOutOfEmission()) {
             return true;
         }
         return false;
@@ -61,25 +53,26 @@ public class Topics extends VirtualFolder {
     public void doRefreshChildren() {
         try {
             this.getChildren().clear();
-            logger.info("RTVE: Refreshing topic " + topicDTO.getTitle());
+            logger.info("RTVE: Refreshing videos of " + programHelper.getProgram().getName());
             discoverChildren();
         } catch (Exception e) {
-            logger.error("RTVE: Could not refresh topics. " + e.getMessage());
+            logger.error("RTVE: Could not refresh videos. " + e.getMessage());
         }
     }
 
     private void getAllVideos() {
-        String uri = topicDTO.getUri() + "/videos" + "?page=" + nextPage + "&size=" + SIZE;
+        String uri = programHelper.toString();
         ViewDTO response = RtveRestClient.getResponse(uri);
         if (response != null && response.getPage().getTotal().intValue() > 0) {
             int totalPages = response.getPage().getTotalPages().intValue();
             int currentPage = response.getPage().getNumber().intValue();
             for (VideoDTO videoDTO : response.getPage().getItems().getVideos()) {
-                addChild(new Videos(videoDTO, false));
+                addChild(new VideoContainer(videoDTO));
             }
             if (totalPages > currentPage) {
-                nextPage++;
-                addChild(new Topics(topicDTO, nextPage));
+                int page = currentPage + 1;
+                addChild(new Programs(new ProgramsHelper(programHelper.getProgram(),
+                        programHelper.getSection(), programHelper.getSeason(), page)));
             }
         }
     }
