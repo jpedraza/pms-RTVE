@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
     <name>RTVE plugin for ps3 media server</name>
     <url>https://github.com/danighieri/pms-RTVE/</url>
-    
+
     <licenses>
         <license>
             <name>GNU General Public License version 3</name>
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>net.pms</groupId>
             <artifactId>pms</artifactId>
-            <version>1.60.0-SNAPSHOT</version>
+            <version>1.71.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
@@ -37,4 +37,3 @@
         </plugins>
     </build>
 </project>
-
