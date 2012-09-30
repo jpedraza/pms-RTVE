@@ -54,15 +54,15 @@ public class RtveRestClient {
             method.setRequestHeader("Accept", "application/" + format.toString().toLowerCase());
             method.setRequestHeader("User-agent", PropertiesUtil.getProjectProperties().get("project.name") + " " + PMS.getVersion());
             LOGGER.info("RTVE: Retrieving " + uri);
-            int statusCode = client.executeMethod(method);
-            if (statusCode != 200) {
+            if (client.executeMethod(method) == 200) {
+                InputStream xml = method.getResponseBodyAsStream();
+                JAXBContext jc = JAXBContext.newInstance(ViewDTO.class);
+                ViewDTO response = (ViewDTO) jc.createUnmarshaller().unmarshal(xml);
+                method.releaseConnection();
+                return response;
+            } else {
                 LOGGER.error("RTVE: Method failed: ", method.getStatusLine());
             }
-            InputStream xml = method.getResponseBodyAsStream();
-            JAXBContext jc = JAXBContext.newInstance(ViewDTO.class);
-            ViewDTO response = (ViewDTO) jc.createUnmarshaller().unmarshal(xml);
-            method.releaseConnection();
-            return response;
         } catch (JAXBException ex) {
             LOGGER.error(ex.getMessage());
         } catch (HttpException ex) {
