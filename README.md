@@ -8,6 +8,8 @@ Download the [pms-RTVE jar file](https://github.com/danighieri/pms-RTVE/download
 
 Building
 ========
+Before building the plugin, set the key in file Alacarta.java.
+You can find the key in the RTVE flash player.
 Make sure PS3 media server is available in local maven repository and execute:
 
     mvn package

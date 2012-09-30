@@ -64,7 +64,10 @@ public class VideoContainer extends VirtualFolder {
         try {
             QualitiesVideo qualitiesVideo = new QualitiesVideo(videoDTO.getQualities().getQualities());
             QualityVideoDTO qualityVideoDTO = qualitiesVideo.getBestQuality();
-            Alacarta alacarta = new Alacarta(qualityVideoDTO.getIdentifier().toString());
+            String assetId = qualityVideoDTO.getIdentifier().toString();
+            String lang = qualityVideoDTO.getLanguage();
+            String mediatype = "video";
+            Alacarta alacarta = new Alacarta(assetId, lang, mediatype);
             videoDTO.setUri(alacarta.getVideoLink());
             addChild(new Videos(videoDTO, true));
             ViewDTO response = RtveRestClient.getResponse(videoDTO.getMainCategoryRef());
@@ -79,8 +82,8 @@ public class VideoContainer extends VirtualFolder {
                     addChild(new Topics(topicDTO, 1));
                 }
             }
-        } catch (IOException ex) {
-            LOGGER.error(ex.getMessage());
+        } catch (Exception ex) {
+            LOGGER.info("RTVE: Error discovering video: " + videoDTO.getLongTitle());
         }
     }
 }

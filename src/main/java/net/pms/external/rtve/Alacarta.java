@@ -16,22 +16,50 @@
  */
 package net.pms.external.rtve;
 
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.JAXBContext;
+import net.pms.external.rtve.response.Response;
+import net.pms.external.rtve.response.Url;
 import net.pms.network.HTTPResource;
+import org.apache.commons.codec.binary.Base64;
 
 public class Alacarta extends HTTPResource {
 
+    private static final String KEY = "";
+    private static final String URL_PREFIX = "http://ztnr.rtve.es/ztnr/res/";
     private String assetId;
+    private String lang;
+    private String mediatype;
 
-    public Alacarta(String assetId) {
+    public Alacarta(String assetId, String lang, String mediatype) {
         this.assetId = assetId;
+        this.lang = lang;
+        this.mediatype = mediatype;
     }
 
-    public String getVideoLink() throws IOException {
-        String url = "http://www.rtve.es/ztnr/preset.jsp?idpreset=" + assetId + "&lenguaje=es&tipo=video";
-        byte data[] = downloadAndSendBinary(url);
-        String source = new String(data, "UTF-8");
-        String location = source.split("<li><em>File Name</em>&nbsp;<span class=\"titulo\">")[1].split("</span></li>")[0];
-        return "http://www.rtve.es/resources/TE_NGVA/" + location;
+    public String getVideoLink() throws Exception {
+        Cipher cipher = Cipher.getInstance("Blowfish/ECB/PKCS5Padding");
+        SecretKeySpec ks = new SecretKeySpec(KEY.getBytes(), "Blowfish");
+        cipher.init(Cipher.ENCRYPT_MODE, ks);
+        String cleartext = assetId + "_" + mediatype + "_" + lang;
+        String b64textCleartext = Base64.encodeBase64String(cipher.doFinal(cleartext.getBytes()));
+        byte data[] = downloadAndSendBinary(URL_PREFIX + b64textCleartext);
+        String b64textResponse = new String(data, "UTF-8");
+        byte[] ciphertext = Base64.decodeBase64(b64textResponse.getBytes());
+        cipher.init(Cipher.DECRYPT_MODE, ks);
+        InputStream xml = new ByteArrayInputStream(cipher.doFinal(ciphertext));
+        JAXBContext jc = JAXBContext.newInstance(Response.class);
+        Response response = (Response) jc.createUnmarshaller().unmarshal(xml);
+        if (response != null && response.getCode().equalsIgnoreCase("OK")) {
+            for (Url url : response.getUrl()) {
+                if (!url.getTipo().equals("failover") && url.getProvider().contains("AKAMAI")) {
+                    return url.getValue();
+                }
+            }
+        }
+        return null;
     }
 }

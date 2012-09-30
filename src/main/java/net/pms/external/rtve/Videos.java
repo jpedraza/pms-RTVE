@@ -54,10 +54,13 @@ public class Videos extends WebVideoStream {
     public InputStream getInputStream(Range range, RendererConfiguration mediarenderer) throws IOException {
         if (qualityVideoDTO != null) {
             if (!videoUrl && alacarta == null) {
-                alacarta = new Alacarta(qualityVideoDTO.getIdentifier().toString());
+                String assetId = qualityVideoDTO.getIdentifier().toString();
+                String lang = qualityVideoDTO.getLanguage();
+                String mediatype = "video";
+                alacarta = new Alacarta(assetId, lang, mediatype);
                 try {
                     this.setUrl(alacarta.getVideoLink());
-                } catch (IOException e) {
+                } catch (Exception e) {
                     LOGGER.info("RTVE: Error discovering video: " + videoDTO.getLongTitle());
                 }
             }
