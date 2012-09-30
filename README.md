@@ -4,7 +4,7 @@ This is a plugin for [PS3MediaServer](https://github.com/ps3mediaserver/ps3media
 
 Installation
 ============
-Download the [pms-RTVE jar file](https://github.com/danighieri/pms-RTVE/downloads), place it in the PMS *plugins* directory and restart PMS.
+See Building.
 
 Building
 ========
@@ -13,6 +13,8 @@ You can find the key in the RTVE flash player.
 Make sure PS3 media server is available in local maven repository and execute:
 
     mvn package
+
+Place result file in the PMS *plugins* directory and restart PMS.
 
 Uninstalling
 ============
