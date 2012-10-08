@@ -1,7 +1,12 @@
 package com.irtve.plataforma.rest.model.dto.channel;
 
 import java.math.BigInteger;
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -24,6 +29,23 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element ref="{}uid"/>
  *         &lt;element ref="{}title"/>
  *         &lt;element ref="{}permalink"/>
+ *         &lt;element ref="{}programsRef"/>
+ *         &lt;element ref="{}videosRef"/>
+ *         &lt;element ref="{}audiosRef"/>
+ *         &lt;element ref="{}multimediasRef"/>
+ *         &lt;element ref="{}directosAhoraRef"/>
+ *         &lt;element ref="{}directosEnvivoAhoraRef"/>
+ *         &lt;element ref="{}directosTodosAhoraRef"/>
+ *         &lt;element ref="{}directosProximosRef"/>
+ *         &lt;element ref="{}directosEnvivoProximosRef"/>
+ *         &lt;element ref="{}directosTodosProximosRef"/>
+ *         &lt;element ref="{}agrupadoresRef"/>
+ *         &lt;element ref="{}videosVistosRef"/>
+ *         &lt;element ref="{}audiosVistosRef"/>
+ *         &lt;element ref="{}multimediasVistosRef"/>
+ *         &lt;element ref="{}videosPopularesRef"/>
+ *         &lt;element ref="{}audiosPopularesRef"/>
+ *         &lt;element ref="{}multimediasPopularesRef"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -41,18 +63,34 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "medioRef",
     "uid",
     "title",
-    "permalink"
+    "permalink",
+    "programsRef",
+    "videosRef",
+    "audiosRef",
+    "multimediasRef",
+    "directosAhoraRef",
+    "directosEnvivoAhoraRef",
+    "directosTodosAhoraRef",
+    "directosProximosRef",
+    "directosEnvivoProximosRef",
+    "directosTodosProximosRef",
+    "agrupadoresRef",
+    "videosVistosRef",
+    "audiosVistosRef",
+    "multimediasVistosRef",
+    "videosPopularesRef",
+    "audiosPopularesRef",
+    "multimediasPopularesRef"
 })
+@XmlRootElement(name = "com.irtve.plataforma.rest.model.dto.channel.CadenaDTO")
 public class CadenaDTO implements Comparable<CadenaDTO> {
-
+    
     @XmlElement(required = true)
     @XmlSchemaType(name = "anyURI")
     protected String uri;
     @XmlElement(required = true)
-    @XmlSchemaType(name = "anyURI")
     protected String htmlUrl;
     @XmlElement(required = true)
-    @XmlSchemaType(name = "anyURI")
     protected String htmlShortUrl;
     @XmlElement(required = true)
     protected BigInteger id;
@@ -67,14 +105,64 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     protected String title;
     @XmlElement(required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NMTOKEN")
+    @XmlSchemaType(name = "NCName")
     protected String permalink;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String programsRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String videosRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String audiosRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String multimediasRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String directosAhoraRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String directosEnvivoAhoraRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String directosTodosAhoraRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String directosProximosRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String directosEnvivoProximosRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String directosTodosProximosRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String agrupadoresRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String videosVistosRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String audiosVistosRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String multimediasVistosRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String videosPopularesRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String audiosPopularesRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String multimediasPopularesRef;
 
     /**
      * Gets the value of the uri property.
      *
-     * @return possible object is
-     *     {@link String }
+     * @return possible object is {@link String }
      *
      */
     public String getUri() {
@@ -84,8 +172,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Sets the value of the uri property.
      *
-     * @param value allowed object is
-     *     {@link String }
+     * @param value allowed object is {@link String }
      *
      */
     public void setUri(String value) {
@@ -95,8 +182,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Gets the value of the htmlUrl property.
      *
-     * @return possible object is
-     *     {@link String }
+     * @return possible object is {@link String }
      *
      */
     public String getHtmlUrl() {
@@ -106,8 +192,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Sets the value of the htmlUrl property.
      *
-     * @param value allowed object is
-     *     {@link String }
+     * @param value allowed object is {@link String }
      *
      */
     public void setHtmlUrl(String value) {
@@ -117,8 +202,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Gets the value of the htmlShortUrl property.
      *
-     * @return possible object is
-     *     {@link String }
+     * @return possible object is {@link String }
      *
      */
     public String getHtmlShortUrl() {
@@ -128,8 +212,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Sets the value of the htmlShortUrl property.
      *
-     * @param value allowed object is
-     *     {@link String }
+     * @param value allowed object is {@link String }
      *
      */
     public void setHtmlShortUrl(String value) {
@@ -139,8 +222,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Gets the value of the id property.
      *
-     * @return possible object is
-     *     {@link BigInteger }
+     * @return possible object is {@link BigInteger }
      *
      */
     public BigInteger getId() {
@@ -150,8 +232,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Sets the value of the id property.
      *
-     * @param value allowed object is
-     *     {@link BigInteger }
+     * @param value allowed object is {@link BigInteger }
      *
      */
     public void setId(BigInteger value) {
@@ -161,8 +242,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Gets the value of the medioRef property.
      *
-     * @return possible object is
-     *     {@link String }
+     * @return possible object is {@link String }
      *
      */
     public String getMedioRef() {
@@ -172,8 +252,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Sets the value of the medioRef property.
      *
-     * @param value allowed object is
-     *     {@link String }
+     * @param value allowed object is {@link String }
      *
      */
     public void setMedioRef(String value) {
@@ -183,8 +262,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Gets the value of the uid property.
      *
-     * @return possible object is
-     *     {@link String }
+     * @return possible object is {@link String }
      *
      */
     public String getUid() {
@@ -194,8 +272,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Sets the value of the uid property.
      *
-     * @param value allowed object is
-     *     {@link String }
+     * @param value allowed object is {@link String }
      *
      */
     public void setUid(String value) {
@@ -205,8 +282,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Gets the value of the title property.
      *
-     * @return possible object is
-     *     {@link String }
+     * @return possible object is {@link String }
      *
      */
     public String getTitle() {
@@ -216,8 +292,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Sets the value of the title property.
      *
-     * @param value allowed object is
-     *     {@link String }
+     * @param value allowed object is {@link String }
      *
      */
     public void setTitle(String value) {
@@ -227,8 +302,7 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Gets the value of the permalink property.
      *
-     * @return possible object is
-     *     {@link String }
+     * @return possible object is {@link String }
      *
      */
     public String getPermalink() {
@@ -238,19 +312,358 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
     /**
      * Sets the value of the permalink property.
      *
-     * @param value allowed object is
-     *     {@link String }
+     * @param value allowed object is {@link String }
      *
      */
     public void setPermalink(String value) {
         this.permalink = value;
     }
 
+    /**
+     * Gets the value of the programsRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getProgramsRef() {
+        return programsRef;
+    }
+
+    /**
+     * Sets the value of the programsRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setProgramsRef(String value) {
+        this.programsRef = value;
+    }
+
+    /**
+     * Gets the value of the videosRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getVideosRef() {
+        return videosRef;
+    }
+
+    /**
+     * Sets the value of the videosRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setVideosRef(String value) {
+        this.videosRef = value;
+    }
+
+    /**
+     * Gets the value of the audiosRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getAudiosRef() {
+        return audiosRef;
+    }
+
+    /**
+     * Sets the value of the audiosRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setAudiosRef(String value) {
+        this.audiosRef = value;
+    }
+
+    /**
+     * Gets the value of the multimediasRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getMultimediasRef() {
+        return multimediasRef;
+    }
+
+    /**
+     * Sets the value of the multimediasRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setMultimediasRef(String value) {
+        this.multimediasRef = value;
+    }
+
+    /**
+     * Gets the value of the directosAhoraRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getDirectosAhoraRef() {
+        return directosAhoraRef;
+    }
+
+    /**
+     * Sets the value of the directosAhoraRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setDirectosAhoraRef(String value) {
+        this.directosAhoraRef = value;
+    }
+
+    /**
+     * Gets the value of the directosEnvivoAhoraRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getDirectosEnvivoAhoraRef() {
+        return directosEnvivoAhoraRef;
+    }
+
+    /**
+     * Sets the value of the directosEnvivoAhoraRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setDirectosEnvivoAhoraRef(String value) {
+        this.directosEnvivoAhoraRef = value;
+    }
+
+    /**
+     * Gets the value of the directosTodosAhoraRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getDirectosTodosAhoraRef() {
+        return directosTodosAhoraRef;
+    }
+
+    /**
+     * Sets the value of the directosTodosAhoraRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setDirectosTodosAhoraRef(String value) {
+        this.directosTodosAhoraRef = value;
+    }
+
+    /**
+     * Gets the value of the directosProximosRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getDirectosProximosRef() {
+        return directosProximosRef;
+    }
+
+    /**
+     * Sets the value of the directosProximosRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setDirectosProximosRef(String value) {
+        this.directosProximosRef = value;
+    }
+
+    /**
+     * Gets the value of the directosEnvivoProximosRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getDirectosEnvivoProximosRef() {
+        return directosEnvivoProximosRef;
+    }
+
+    /**
+     * Sets the value of the directosEnvivoProximosRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setDirectosEnvivoProximosRef(String value) {
+        this.directosEnvivoProximosRef = value;
+    }
+
+    /**
+     * Gets the value of the directosTodosProximosRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getDirectosTodosProximosRef() {
+        return directosTodosProximosRef;
+    }
+
+    /**
+     * Sets the value of the directosTodosProximosRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setDirectosTodosProximosRef(String value) {
+        this.directosTodosProximosRef = value;
+    }
+
+    /**
+     * Gets the value of the agrupadoresRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getAgrupadoresRef() {
+        return agrupadoresRef;
+    }
+
+    /**
+     * Sets the value of the agrupadoresRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setAgrupadoresRef(String value) {
+        this.agrupadoresRef = value;
+    }
+
+    /**
+     * Gets the value of the videosVistosRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getVideosVistosRef() {
+        return videosVistosRef;
+    }
+
+    /**
+     * Sets the value of the videosVistosRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setVideosVistosRef(String value) {
+        this.videosVistosRef = value;
+    }
+
+    /**
+     * Gets the value of the audiosVistosRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getAudiosVistosRef() {
+        return audiosVistosRef;
+    }
+
+    /**
+     * Sets the value of the audiosVistosRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setAudiosVistosRef(String value) {
+        this.audiosVistosRef = value;
+    }
+
+    /**
+     * Gets the value of the multimediasVistosRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getMultimediasVistosRef() {
+        return multimediasVistosRef;
+    }
+
+    /**
+     * Sets the value of the multimediasVistosRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setMultimediasVistosRef(String value) {
+        this.multimediasVistosRef = value;
+    }
+
+    /**
+     * Gets the value of the videosPopularesRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getVideosPopularesRef() {
+        return videosPopularesRef;
+    }
+
+    /**
+     * Sets the value of the videosPopularesRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setVideosPopularesRef(String value) {
+        this.videosPopularesRef = value;
+    }
+
+    /**
+     * Gets the value of the audiosPopularesRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getAudiosPopularesRef() {
+        return audiosPopularesRef;
+    }
+
+    /**
+     * Sets the value of the audiosPopularesRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setAudiosPopularesRef(String value) {
+        this.audiosPopularesRef = value;
+    }
+
+    /**
+     * Gets the value of the multimediasPopularesRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getMultimediasPopularesRef() {
+        return multimediasPopularesRef;
+    }
+
+    /**
+     * Sets the value of the multimediasPopularesRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setMultimediasPopularesRef(String value) {
+        this.multimediasPopularesRef = value;
+    }
+    
     @Override
     public int compareTo(CadenaDTO c) {
         return this.getTitle().compareToIgnoreCase(c.getTitle());
     }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -260,9 +673,11 @@ public class CadenaDTO implements Comparable<CadenaDTO> {
             return false;
         }
         CadenaDTO cadena = (CadenaDTO) o;
-        return uri.equals(cadena.getUri()) && uid.equals(cadena.getUid()) && title.equals(cadena.getTitle());
+        return uri.equals(cadena.getUri())
+                && uid.equals(cadena.getUid())
+                && title.equals(cadena.getTitle());
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 7;

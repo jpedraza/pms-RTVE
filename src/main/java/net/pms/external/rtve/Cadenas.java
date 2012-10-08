@@ -72,7 +72,7 @@ public class Cadenas extends VirtualFolder {
     }
 
     private void getAllPrograms() {
-        String uri = cadenaDTO.getUri() + "/programas" + "?page=" + nextPage;
+        String uri = cadenaDTO.getProgramsRef() + "?page=" + nextPage;
         ViewDTO response = RtveRestClient.getResponse(uri);
         if (response != null && response.getPage().getTotal().intValue() > 0) {
             int totalPages = response.getPage().getTotalPages().intValue();

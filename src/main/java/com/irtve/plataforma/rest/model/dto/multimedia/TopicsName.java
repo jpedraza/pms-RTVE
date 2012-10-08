@@ -1,8 +1,11 @@
-package com.irtve.plataforma.rest.model.dto.multimedia.quality;
+package com.irtve.plataforma.rest.model.dto.multimedia;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
@@ -15,7 +18,7 @@ import javax.xml.bind.annotation.*;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{}com.irtve.plataforma.rest.model.dto.multimedia.quality.QualityVideoDTO" maxOccurs="unbounded"/>
+ *         &lt;element ref="{}string" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,37 +29,36 @@ import javax.xml.bind.annotation.*;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "Qualities"
+    "string"
 })
-@XmlRootElement(name = "qualities")
-public class QualitiesDTO {
+@XmlRootElement(name = "topicsName")
+public class TopicsName {
 
-    @XmlElement(name = "com.irtve.plataforma.rest.model.dto.multimedia.quality.QualityVideoDTO", required = true)
-    protected List<QualityVideoDTO> Qualities;
+    protected List<String> string;
 
     /**
-     * Gets the value of the Qualities property.
+     * Gets the value of the string property.
      *
      * <p> This accessor method returns a reference to the live list, not a
      * snapshot. Therefore any modification you make to the returned list will
      * be present inside the JAXB object. This is why there is not a
-     * <CODE>set</CODE> method for the Qualities property.
+     * <CODE>set</CODE> method for the string property.
      *
      * <p> For example, to add a new item, do as follows:
      * <pre>
-     *    getQualities().add(newItem);
+     *    getString().add(newItem);
      * </pre>
      *
      *
      * <p> Objects of the following type(s) are allowed in the list
-     * {@link QualityVideo }
+     * {@link String }
      *
      *
      */
-    public List<QualityVideoDTO> getQualities() {
-        if (Qualities == null) {
-            Qualities = new ArrayList<QualityVideoDTO>();
+    public List<String> getString() {
+        if (string == null) {
+            string = new ArrayList<String>();
         }
-        return this.Qualities;
+        return this.string;
     }
 }

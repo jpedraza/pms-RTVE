@@ -38,7 +38,7 @@ public class Videos extends WebVideoStream {
         super(videoDTO.getLongTitle(), videoDTO.getUri(), videoDTO.getThumbnail());
         this.videoDTO = videoDTO;
         this.videoUrl = videoUrl;
-        QualitiesVideo qualitiesVideo = new QualitiesVideo(videoDTO.getQualities().getQualities());
+        QualitiesVideo qualitiesVideo = new QualitiesVideo(videoDTO.getQualities().getQualityVideos());
         qualityVideoDTO = qualitiesVideo.getBestQuality();
     }
 

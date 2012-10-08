@@ -116,10 +116,10 @@ public class ProgramsHelper {
             st += seasonDTO.getUri() + "/videos";
         }
         if (sectionDTO != null && seasonDTO == null) {
-            st += sectionDTO.getUri() + "/videos";
+            st += sectionDTO.getLinks().getVideosRef();
         }
         if (sectionDTO == null && seasonDTO == null) {
-            st += st + programDTO.getUri() + "/videos";
+            st += st + programDTO.getVideosRef();
         }
         st += "?size=" + SIZE;
         if (page != 0) {

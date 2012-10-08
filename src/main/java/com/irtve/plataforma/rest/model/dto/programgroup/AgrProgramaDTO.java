@@ -1,4 +1,4 @@
-package com.irtve.plataforma.rest.model.dto.agrupator;
+package com.irtve.plataforma.rest.model.dto.programgroup;
 
 import java.math.BigInteger;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -7,8 +7,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for anonymous complex type.
@@ -25,10 +23,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element ref="{}htmlUrl"/>
  *         &lt;element ref="{}htmlShortUrl"/>
  *         &lt;element ref="{}id"/>
- *         &lt;element ref="{}uid"/>
  *         &lt;element ref="{}name"/>
- *         &lt;element ref="{}permalink"/>
- *         &lt;element ref="{}childrenRef"/>
  *         &lt;element ref="{}programsRef"/>
  *         &lt;element ref="{}videosRef"/>
  *         &lt;element ref="{}audiosRef"/>
@@ -47,17 +42,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "htmlUrl",
     "htmlShortUrl",
     "id",
-    "uid",
     "name",
-    "permalink",
-    "childrenRef",
     "programsRef",
     "videosRef",
     "audiosRef",
     "multimediasRef"
 })
-@XmlRootElement(name = "com.irtve.plataforma.rest.model.dto.agrupator.AgrupadorDTO")
-public class AgrupadorDTO implements Comparable<AgrupadorDTO> {
+@XmlRootElement(name = "com.irtve.plataforma.rest.model.dto.programgroup.AgrProgramaDTO")
+public class AgrProgramaDTO implements Comparable<AgrProgramaDTO> {
 
     @XmlElement(required = true)
     @XmlSchemaType(name = "anyURI")
@@ -70,20 +62,7 @@ public class AgrupadorDTO implements Comparable<AgrupadorDTO> {
     @XmlElement(required = true)
     protected BigInteger id;
     @XmlElement(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NCName")
-    protected String uid;
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NCName")
     protected String name;
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NCName")
-    protected String permalink;
-    @XmlElement(required = true)
-    @XmlSchemaType(name = "anyURI")
-    protected String childrenRef;
     @XmlElement(required = true)
     @XmlSchemaType(name = "anyURI")
     protected String programsRef;
@@ -178,26 +157,6 @@ public class AgrupadorDTO implements Comparable<AgrupadorDTO> {
     }
 
     /**
-     * Gets the value of the uid property.
-     *
-     * @return possible object is {@link String }
-     *
-     */
-    public String getUid() {
-        return uid;
-    }
-
-    /**
-     * Sets the value of the uid property.
-     *
-     * @param value allowed object is {@link String }
-     *
-     */
-    public void setUid(String value) {
-        this.uid = value;
-    }
-
-    /**
      * Gets the value of the name property.
      *
      * @return possible object is {@link String }
@@ -215,46 +174,6 @@ public class AgrupadorDTO implements Comparable<AgrupadorDTO> {
      */
     public void setName(String value) {
         this.name = value;
-    }
-
-    /**
-     * Gets the value of the permalink property.
-     *
-     * @return possible object is {@link String }
-     *
-     */
-    public String getPermalink() {
-        return permalink;
-    }
-
-    /**
-     * Sets the value of the permalink property.
-     *
-     * @param value allowed object is {@link String }
-     *
-     */
-    public void setPermalink(String value) {
-        this.permalink = value;
-    }
-
-    /**
-     * Gets the value of the childrenRef property.
-     *
-     * @return possible object is {@link String }
-     *
-     */
-    public String getChildrenRef() {
-        return childrenRef;
-    }
-
-    /**
-     * Sets the value of the childrenRef property.
-     *
-     * @param value allowed object is {@link String }
-     *
-     */
-    public void setChildrenRef(String value) {
-        this.childrenRef = value;
     }
 
     /**
@@ -338,7 +257,7 @@ public class AgrupadorDTO implements Comparable<AgrupadorDTO> {
     }
 
     @Override
-    public int compareTo(AgrupadorDTO a) {
+    public int compareTo(AgrProgramaDTO a) {
         return this.getName().compareToIgnoreCase(a.getName());
     }
 
@@ -347,20 +266,20 @@ public class AgrupadorDTO implements Comparable<AgrupadorDTO> {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof AgrupadorDTO)) {
+        if (!(o instanceof AgrProgramaDTO)) {
             return false;
         }
-        AgrupadorDTO agrupador = (AgrupadorDTO) o;
-        return uri.equals(agrupador.getUri())
-                && uid.equals(agrupador.getUid())
-                && name.equals(agrupador.getName());
+        AgrProgramaDTO agrAgrupador = (AgrProgramaDTO) o;
+        return uri.equals(agrAgrupador.getUri())
+                && id.equals(agrAgrupador.getId())
+                && name.equals(agrAgrupador.getName());
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 29 * hash + (this.uri != null ? this.uri.hashCode() : 0);
-        hash = 29 * hash + (this.uid != null ? this.uid.hashCode() : 0);
+        hash = 29 * hash + (this.id != null ? this.id.hashCode() : 0);
         hash = 29 * hash + (this.name != null ? this.name.hashCode() : 0);
         return hash;
     }

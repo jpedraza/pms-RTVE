@@ -28,11 +28,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element ref="{}type"/>
  *         &lt;element ref="{}duration"/>
  *         &lt;element ref="{}bitRate"/>
- *         &lt;element ref="{}bitRateUnit"/>
  *         &lt;element ref="{}language"/>
- *         &lt;element ref="{}previewPath" minOccurs="0"/>
- *         &lt;element ref="{}height"/>
- *         &lt;element ref="{}width"/>
+ *         &lt;element ref="{}numOfChannels"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -50,15 +47,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "type",
     "duration",
     "bitRate",
-    "bitRateUnit",
     "language",
-    "previewPath",
-    "height",
-    "width"
+    "numOfChannels"
 })
-@XmlRootElement(name = "com.irtve.plataforma.rest.model.dto.multimedia.quality.QualityVideoDTO")
-public class QualityVideoDTO implements Comparable<QualityVideoDTO> {
-
+@XmlRootElement(name = "com.irtve.plataforma.rest.model.dto.multimedia.quality.QualityAudioDTO")
+public class QualityAudioDTO implements Comparable<QualityAudioDTO> {
+    
     @XmlElement(required = true)
     protected BigInteger identifier;
     @XmlElement(required = true)
@@ -79,17 +73,9 @@ public class QualityVideoDTO implements Comparable<QualityVideoDTO> {
     @XmlElement(required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "NCName")
-    protected String bitRateUnit;
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NCName")
     protected String language;
-    @XmlSchemaType(name = "anyURI")
-    protected String previewPath;
     @XmlElement(required = true)
-    protected BigInteger height;
-    @XmlElement(required = true)
-    protected BigInteger width;
+    protected BigInteger numOfChannels;
 
     /**
      * Gets the value of the identifier property.
@@ -232,26 +218,6 @@ public class QualityVideoDTO implements Comparable<QualityVideoDTO> {
     }
 
     /**
-     * Gets the value of the bitRateUnit property.
-     *
-     * @return possible object is {@link String }
-     *
-     */
-    public String getBitRateUnit() {
-        return bitRateUnit;
-    }
-
-    /**
-     * Sets the value of the bitRateUnit property.
-     *
-     * @param value allowed object is {@link String }
-     *
-     */
-    public void setBitRateUnit(String value) {
-        this.bitRateUnit = value;
-    }
-
-    /**
      * Gets the value of the language property.
      *
      * @return possible object is {@link String }
@@ -272,84 +238,44 @@ public class QualityVideoDTO implements Comparable<QualityVideoDTO> {
     }
 
     /**
-     * Gets the value of the previewPath property.
-     *
-     * @return possible object is {@link String }
-     *
-     */
-    public String getPreviewPath() {
-        return previewPath;
-    }
-
-    /**
-     * Sets the value of the previewPath property.
-     *
-     * @param value allowed object is {@link String }
-     *
-     */
-    public void setPreviewPath(String value) {
-        this.previewPath = value;
-    }
-
-    /**
-     * Gets the value of the height property.
+     * Gets the value of the numOfChannels property.
      *
      * @return possible object is {@link BigInteger }
      *
      */
-    public BigInteger getHeight() {
-        return height;
+    public BigInteger getNumOfChannels() {
+        return numOfChannels;
     }
 
     /**
-     * Sets the value of the height property.
+     * Sets the value of the numOfChannels property.
      *
      * @param value allowed object is {@link BigInteger }
      *
      */
-    public void setHeight(BigInteger value) {
-        this.height = value;
+    public void setNumOfChannels(BigInteger value) {
+        this.numOfChannels = value;
     }
-
-    /**
-     * Gets the value of the width property.
-     *
-     * @return possible object is {@link BigInteger }
-     *
-     */
-    public BigInteger getWidth() {
-        return width;
-    }
-
-    /**
-     * Sets the value of the width property.
-     *
-     * @param value allowed object is {@link BigInteger }
-     *
-     */
-    public void setWidth(BigInteger value) {
-        this.width = value;
-    }
-
+    
     @Override
-    public int compareTo(QualityVideoDTO q) {
+    public int compareTo(QualityAudioDTO q) {
         return this.getIdentifier().compareTo(q.getIdentifier());
     }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof QualityVideoDTO)) {
+        if (!(o instanceof QualityAudioDTO)) {
             return false;
         }
-        QualityVideoDTO quality = (QualityVideoDTO) o;
+        QualityAudioDTO quality = (QualityAudioDTO) o;
         return identifier.equals(quality.getIdentifier())
                 && filePath.equals(quality.getFilePath())
                 && filesize.equals(quality.getFilesize());
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 7;

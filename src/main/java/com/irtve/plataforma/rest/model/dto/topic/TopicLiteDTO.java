@@ -1,6 +1,5 @@
-package com.irtve.plataforma.rest.model.dto.program.section;
+package com.irtve.plataforma.rest.model.dto.topic;
 
-import com.irtve.plataforma.rest.model.dto.program.Links;
 import java.math.BigInteger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -24,9 +23,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *       &lt;sequence>
  *         &lt;element ref="{}uri"/>
  *         &lt;element ref="{}id"/>
+ *         &lt;element ref="{}uid"/>
  *         &lt;element ref="{}title"/>
- *         &lt;element ref="{}permalink"/>
- *         &lt;element ref="{}links"/>
+ *         &lt;element ref="{}parentRef"/>
+ *         &lt;element ref="{}childrenRef"/>
+ *         &lt;element ref="{}descendantsRef"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -39,12 +40,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlType(name = "", propOrder = {
     "uri",
     "id",
+    "uid",
     "title",
-    "permalink",
-    "links"
+    "parentRef",
+    "childrenRef",
+    "descendantsRef"
 })
-@XmlRootElement(name = "com.irtve.plataforma.rest.model.dto.program.section.SectionDTO")
-public class SectionDTO implements Comparable<SectionDTO> {
+@XmlRootElement(name = "com.irtve.plataforma.rest.model.dto.topic.TopicLiteDTO")
+public class TopicLiteDTO implements Comparable<TopicLiteDTO> {
 
     @XmlElement(required = true)
     @XmlSchemaType(name = "anyURI")
@@ -52,13 +55,22 @@ public class SectionDTO implements Comparable<SectionDTO> {
     @XmlElement(required = true)
     protected BigInteger id;
     @XmlElement(required = true)
-    protected String title;
+    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+    @XmlSchemaType(name = "NCName")
+    protected String uid;
     @XmlElement(required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "NCName")
-    protected String permalink;
+    protected String title;
     @XmlElement(required = true)
-    protected Links links;
+    @XmlSchemaType(name = "anyURI")
+    protected String parentRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String childrenRef;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String descendantsRef;
 
     /**
      * Gets the value of the uri property.
@@ -101,6 +113,26 @@ public class SectionDTO implements Comparable<SectionDTO> {
     }
 
     /**
+     * Gets the value of the uid property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getUid() {
+        return uid;
+    }
+
+    /**
+     * Sets the value of the uid property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setUid(String value) {
+        this.uid = value;
+    }
+
+    /**
      * Gets the value of the title property.
      *
      * @return possible object is {@link String }
@@ -121,48 +153,68 @@ public class SectionDTO implements Comparable<SectionDTO> {
     }
 
     /**
-     * Gets the value of the permalink property.
+     * Gets the value of the parentRef property.
      *
      * @return possible object is {@link String }
      *
      */
-    public String getPermalink() {
-        return permalink;
+    public String getParentRef() {
+        return parentRef;
     }
 
     /**
-     * Sets the value of the permalink property.
+     * Sets the value of the parentRef property.
      *
      * @param value allowed object is {@link String }
      *
      */
-    public void setPermalink(String value) {
-        this.permalink = value;
+    public void setParentRef(String value) {
+        this.parentRef = value;
     }
 
     /**
-     * Gets the value of the links property.
+     * Gets the value of the childrenRef property.
      *
-     * @return possible object is {@link Links }
+     * @return possible object is {@link String }
      *
      */
-    public Links getLinks() {
-        return links;
+    public String getChildrenRef() {
+        return childrenRef;
     }
 
     /**
-     * Sets the value of the links property.
+     * Sets the value of the childrenRef property.
      *
-     * @param value allowed object is {@link Links }
+     * @param value allowed object is {@link String }
      *
      */
-    public void setLinks(Links value) {
-        this.links = value;
+    public void setChildrenRef(String value) {
+        this.childrenRef = value;
+    }
+
+    /**
+     * Gets the value of the descendantsRef property.
+     *
+     * @return possible object is {@link String }
+     *
+     */
+    public String getDescendantsRef() {
+        return descendantsRef;
+    }
+
+    /**
+     * Sets the value of the descendantsRef property.
+     *
+     * @param value allowed object is {@link String }
+     *
+     */
+    public void setDescendantsRef(String value) {
+        this.descendantsRef = value;
     }
 
     @Override
-    public int compareTo(SectionDTO s) {
-        return this.getTitle().compareToIgnoreCase(s.getTitle());
+    public int compareTo(TopicLiteDTO t) {
+        return this.getTitle().compareToIgnoreCase(t.getTitle());
     }
 
     @Override
@@ -170,18 +222,20 @@ public class SectionDTO implements Comparable<SectionDTO> {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof SectionDTO)) {
+        if (!(o instanceof TopicLiteDTO)) {
             return false;
         }
-        SectionDTO section = (SectionDTO) o;
-        return uri.equals(section.getUri())
-                && title.equals(section.getTitle());
+        TopicLiteDTO topic = (TopicLiteDTO) o;
+        return uri.equals(topic.getUri())
+                && uid.equals(topic.getUid())
+                && title.equals(topic.getTitle());
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 29 * hash + (this.uri != null ? this.uri.hashCode() : 0);
+        hash = 29 * hash + (this.uid != null ? this.uid.hashCode() : 0);
         hash = 29 * hash + (this.title != null ? this.title.hashCode() : 0);
         return hash;
     }

@@ -64,7 +64,7 @@ public class Topics extends VirtualFolder {
     }
 
     private void getAllVideos() {
-        String uri = topicDTO.getUri() + "/videos" + "?page=" + nextPage + "&size=" + SIZE;
+        String uri = topicDTO.getVideosRef() + "?page=" + nextPage + "&size=" + SIZE;
         ViewDTO response = RtveRestClient.getResponse(uri);
         if (response != null && response.getPage().getTotal().intValue() > 0) {
             int totalPages = response.getPage().getTotalPages().intValue();

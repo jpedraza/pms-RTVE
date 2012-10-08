@@ -62,7 +62,7 @@ public class VideoContainer extends VirtualFolder {
 
     private void getAllVideoTopics() {
         try {
-            QualitiesVideo qualitiesVideo = new QualitiesVideo(videoDTO.getQualities().getQualities());
+            QualitiesVideo qualitiesVideo = new QualitiesVideo(videoDTO.getQualities().getQualityVideos());
             QualityVideoDTO qualityVideoDTO = qualitiesVideo.getBestQuality();
             String assetId = qualityVideoDTO.getIdentifier().toString();
             String lang = qualityVideoDTO.getLanguage();

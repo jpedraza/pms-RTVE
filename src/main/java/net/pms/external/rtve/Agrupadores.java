@@ -74,7 +74,7 @@ public class Agrupadores extends VirtualFolder {
     }
 
     private void getAllPrograms() {
-        String uri = agrupadorDTO.getUri() + "/programas" + "?page=" + nextPage;
+        String uri = agrupadorDTO.getProgramsRef() + "?page=" + nextPage;
         ViewDTO response = RtveRestClient.getResponse(uri);
         if (response != null && response.getPage().getTotal().intValue() > 0) {
             int totalPages = response.getPage().getTotalPages().intValue();
@@ -94,7 +94,7 @@ public class Agrupadores extends VirtualFolder {
     }
 
     private void getAllChildrens(AgrupadorDTO agrupador) {
-        String uri = agrupador.getUri() + "/hijos";
+        String uri = agrupador.getChildrenRef();
         ViewDTO response = RtveRestClient.getResponse(uri);
         if (response != null && response.getPage().getTotal().intValue() > 0) {
             for (AgrupadorDTO childDTO : response.getPage().getItems().getAgrupadores()) {

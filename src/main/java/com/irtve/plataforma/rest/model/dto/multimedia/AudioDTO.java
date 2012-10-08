@@ -53,8 +53,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element ref="{}relManualesRef"/>
  *         &lt;element ref="{}publicidadRef"/>
  *         &lt;element ref="{}comentariosRef"/>
- *         &lt;element ref="{}episode"/>
- *         &lt;element ref="{}subtitleRef"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -95,13 +93,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "relacionadosRef",
     "relManualesRef",
     "publicidadRef",
-    "comentariosRef",
-    "episode",
-    "subtitleRef"
+    "comentariosRef"
 })
-@XmlRootElement(name = "com.irtve.plataforma.rest.model.dto.multimedia.VideoDTO")
-public class VideoDTO implements Comparable<VideoDTO> {
-    
+@XmlRootElement(name = "com.irtve.plataforma.rest.model.dto.multimedia.AudioDTO")
+public class AudioDTO implements Comparable<AudioDTO> {
+
     @XmlElement(required = true)
     @XmlSchemaType(name = "anyURI")
     protected String uri;
@@ -180,11 +176,6 @@ public class VideoDTO implements Comparable<VideoDTO> {
     @XmlElement(required = true)
     @XmlSchemaType(name = "anyURI")
     protected String comentariosRef;
-    @XmlElement(required = true)
-    protected BigInteger episode;
-    @XmlElement(required = true)
-    @XmlSchemaType(name = "anyURI")
-    protected String subtitleRef;
 
     /**
      * Gets the value of the uri property.
@@ -806,67 +797,27 @@ public class VideoDTO implements Comparable<VideoDTO> {
         this.comentariosRef = value;
     }
 
-    /**
-     * Gets the value of the episode property.
-     *
-     * @return possible object is {@link BigInteger }
-     *
-     */
-    public BigInteger getEpisode() {
-        return episode;
-    }
-
-    /**
-     * Sets the value of the episode property.
-     *
-     * @param value allowed object is {@link BigInteger }
-     *
-     */
-    public void setEpisode(BigInteger value) {
-        this.episode = value;
-    }
-
-    /**
-     * Gets the value of the subtitleRef property.
-     *
-     * @return possible object is {@link String }
-     *
-     */
-    public String getSubtitleRef() {
-        return subtitleRef;
-    }
-
-    /**
-     * Sets the value of the subtitleRef property.
-     *
-     * @param value allowed object is {@link String }
-     *
-     */
-    public void setSubtitleRef(String value) {
-        this.subtitleRef = value;
-    }
-    
     @Override
-    public int compareTo(VideoDTO v) {
-        return this.getDateOfEmission().compareTo(v.getDateOfEmission());
+    public int compareTo(AudioDTO a) {
+        return this.getDateOfEmission().compareTo(a.getDateOfEmission());
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof VideoDTO)) {
+        if (!(o instanceof AudioDTO)) {
             return false;
         }
-        VideoDTO video = (VideoDTO) o;
-        return uri.equals(video.getUri())
-                && dateOfEmission.equals(video.getDateOfEmission())
-                && publicationDate.equals(video.getPublicationDate())
-                && longTitle.equals(video.getLongTitle())
-                && shortTitle.equals(video.getShortTitle());
+        AudioDTO audio = (AudioDTO) o;
+        return uri.equals(audio.getUri())
+                && dateOfEmission.equals(audio.getDateOfEmission())
+                && publicationDate.equals(audio.getPublicationDate())
+                && longTitle.equals(audio.getLongTitle())
+                && shortTitle.equals(audio.getShortTitle());
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 7;
