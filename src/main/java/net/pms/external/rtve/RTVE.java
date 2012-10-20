@@ -46,7 +46,6 @@ public class RTVE implements AdditionalFolderAtRoot {
     @Override
     public DLNAResource getChild() {
         VirtualFolder mainFolder = new VirtualFolder(NAME, "") {
-
             @Override
             public InputStream getThumbnailInputStream() {
                 try {

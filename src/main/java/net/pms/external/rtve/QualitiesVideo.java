@@ -52,7 +52,6 @@ public class QualitiesVideo {
 
     private QualityVideoDTO getQuality(final String quality) {
         QualityVideoDTO q = (QualityVideoDTO) CollectionUtils.find(qualityVideosDTO, new Predicate() {
-
             @Override
             public boolean evaluate(Object o) {
                 QualityVideoDTO p = (QualityVideoDTO) o;

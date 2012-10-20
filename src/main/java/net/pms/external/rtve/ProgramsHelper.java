@@ -22,7 +22,7 @@ import com.irtve.plataforma.rest.model.dto.program.section.SectionDTO;
 
 public class ProgramsHelper {
 
-    private static final Integer SIZE = 50;
+    private static final int SIZE = 50;
     private int page;
     private String title;
     private ProgramDTO programDTO;
@@ -39,7 +39,7 @@ public class ProgramsHelper {
             this.seasonDTO = seasonDTO;
         }
         if (seasonDTO == null && sectionDTO == null) {
-            title = "Todo";
+            title = String.valueOf(SIZE * page - 1) + " - " + String.valueOf(page * SIZE);
         }
         this.programDTO = programDTO;
         this.page = page;
@@ -66,7 +66,7 @@ public class ProgramsHelper {
     }
 
     public static int getSIZE() {
-        return SIZE.intValue();
+        return SIZE;
     }
 
     public int getPage() {
