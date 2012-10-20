@@ -17,29 +17,39 @@
 package net.pms.external.rtve;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.JAXBContext;
+import net.pms.PMS;
 import net.pms.external.rtve.response.Response;
 import net.pms.external.rtve.response.Url;
 import net.pms.network.HTTPResource;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Alacarta extends HTTPResource {
 
-    private static final String KEY = "";
-    private static final String URL_PREFIX = "http://ztnr.rtve.es/ztnr/res/";
+    private static final String KEY_FILE = "pms-RTVE.properties";
+    private static final String URL_REST = "http://ztnr.rtve.es/ztnr/res/";
+    private static String KEY;
     private String assetId;
     private String lang;
     private String mediatype;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Alacarta.class);
 
     public Alacarta(String assetId, String lang, String mediatype) {
         this.assetId = assetId;
         this.lang = lang;
         this.mediatype = mediatype;
+        readKey();
     }
 
     public String getVideoLink() throws Exception {
@@ -48,7 +58,7 @@ public class Alacarta extends HTTPResource {
         cipher.init(Cipher.ENCRYPT_MODE, ks);
         String cleartext = assetId + "_" + mediatype + "_" + lang;
         String b64textReq = Base64.encodeBase64String(cipher.doFinal(cleartext.getBytes()));
-        byte data[] = downloadAndSendBinary(URL_PREFIX + b64textReq);
+        byte data[] = downloadAndSendBinary(URL_REST + b64textReq);
         String b64textRes = new String(data, "UTF-8");
         byte[] ciphertext = Base64.decodeBase64(b64textRes.getBytes());
         cipher.init(Cipher.DECRYPT_MODE, ks);
@@ -66,5 +76,17 @@ public class Alacarta extends HTTPResource {
             return url.getValue();
         }
         return null;
+    }
+
+    private void readKey() {
+        try {
+            Properties prop = new Properties();
+            String dir = PMS.getConfiguration().getPluginDirectory();
+            String file = dir + File.separator + KEY_FILE;
+            prop.load(new FileInputStream(file));
+            KEY = prop.getProperty("rtve.key");
+        } catch (IOException ex) {
+            LOGGER.error("RTVE: Error getting key for decryption: " + ex.getMessage());
+        }
     }
 }
