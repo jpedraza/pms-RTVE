@@ -83,7 +83,7 @@ public class VideoContainer extends VirtualFolder {
                 }
             }
         } catch (Exception ex) {
-            LOGGER.info("RTVE: Error discovering video: " + videoDTO.getLongTitle());
+            LOGGER.error("RTVE: Error discovering video: " + videoDTO.getLongTitle());
         }
     }
 }

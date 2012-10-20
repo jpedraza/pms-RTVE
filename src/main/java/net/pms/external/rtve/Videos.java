@@ -61,7 +61,7 @@ public class Videos extends WebVideoStream {
                 try {
                     this.setUrl(alacarta.getVideoLink());
                 } catch (Exception e) {
-                    LOGGER.info("RTVE: Error discovering video: " + videoDTO.getLongTitle());
+                    LOGGER.error("RTVE: Error discovering video: " + videoDTO.getLongTitle());
                 }
             }
         }
