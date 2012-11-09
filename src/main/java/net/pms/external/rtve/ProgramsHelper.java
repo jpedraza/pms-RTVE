@@ -39,7 +39,7 @@ public class ProgramsHelper {
             this.seasonDTO = seasonDTO;
         }
         if (seasonDTO == null && sectionDTO == null) {
-            title = String.valueOf(SIZE * page - 1) + " - " + String.valueOf(page * SIZE);
+            title = String.valueOf(SIZE * (page - 1) + 1) + " - " + String.valueOf(page * SIZE);
         }
         this.programDTO = programDTO;
         this.page = page;
