@@ -57,7 +57,7 @@ public class Alacarta extends HTTPResource {
         SecretKeySpec ks = new SecretKeySpec(KEY.getBytes(), "Blowfish");
         cipher.init(Cipher.ENCRYPT_MODE, ks);
         String cleartext = assetId + "_" + mediatype + "_" + lang;
-        String b64textReq = Base64.encodeBase64String(cipher.doFinal(cleartext.getBytes()));
+        String b64textReq = encodeBase64SafeUrl(cipher.doFinal(cleartext.getBytes()));
         byte data[] = downloadAndSendBinary(URL_REST + b64textReq);
         String b64textRes = new String(data, "UTF-8");
         byte[] ciphertext = Base64.decodeBase64(b64textRes.getBytes());
@@ -88,5 +88,9 @@ public class Alacarta extends HTTPResource {
         } catch (IOException ex) {
             LOGGER.error("RTVE: Error getting key for decryption: " + ex.getMessage());
         }
+    }
+
+    private String encodeBase64SafeUrl(byte[] b64) {
+        return Base64.encodeBase64String(b64).replace("/", "_").replace("+", "-");
     }
 }
