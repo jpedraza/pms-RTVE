@@ -21,7 +21,7 @@
         <dependency>
             <groupId>net.pms</groupId>
             <artifactId>pms</artifactId>
-            <version>1.71.0-SNAPSHOT</version>
+            <version>1.71.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
