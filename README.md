@@ -2,9 +2,14 @@ Description
 ===========
 This is a plugin for [PS3MediaServer](https://github.com/ps3mediaserver/ps3mediaserver) (PMS) that allows you to stream all TV shows from [RTVE.es](http://www.rtve.es/alacarta/).
 
+Discussion
+==========
+[PS3 Media Server Forum](http://www.ps3mediaserver.org/forum/viewtopic.php?t=11219)
+
 Installation
 ============
 Download the [pms-RTVE jar file](https://github.com/danighieri/pms-RTVE/downloads) or build pms-RTVE, place it in the PMS *plugins* directory.
+
 Put pms-RTVE.properties file in the *plugins* directory and set rtve.key property.
 
     ## Sample properties file
