@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.pms.external</groupId>
     <artifactId>pms-RTVE</artifactId>
-    <version>0.5</version>
+    <version>0.5.1</version>
     <packaging>jar</packaging>
     <name>RTVE plugin for ps3 media server</name>
     <url>https://github.com/danighieri/pms-RTVE/</url>
