@@ -8,7 +8,7 @@ Discussion
 
 Installation
 ============
-Download the [pms-RTVE jar file](https://github.com/danighieri/pms-RTVE/downloads) or build pms-RTVE, place it in the PMS *plugins* directory.
+Download the [pms-RTVE jar file](https://www.dropbox.com/sh/i72m90ly5va9khq/9MDxgzM_9D) or build pms-RTVE, place it in the PMS *plugins* directory.
 
 Put pms-RTVE.properties file in the *plugins* directory and set rtve.key property.
 
