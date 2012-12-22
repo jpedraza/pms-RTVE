@@ -70,7 +70,7 @@ public class Alacarta extends HTTPResource {
                 @Override
                 public boolean evaluate(Object o) {
                     Url u = (Url) o;
-                    return u.getTipo().equals("failover");
+                    return u.getProvider().startsWith("AKAMAI");
                 }
             });
             return url.getValue();
